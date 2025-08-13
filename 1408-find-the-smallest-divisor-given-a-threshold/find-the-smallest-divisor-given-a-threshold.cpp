@@ -1,23 +1,21 @@
 class Solution {
 public:
-    int smallestDivisor(vector<int>& nums, int threshold) {
-         int left = 1;
-    int right = *max_element(nums.begin(), nums.end());
-    auto computeSum = [&](int divisor) {
-        long long total = 0;
-        for (int num : nums) {
-            total += (num + divisor - 1) / divisor; // ceiling division
-        }
-        return total;
-    };
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (computeSum(mid) > threshold) {
-            left = mid + 1;
-        } else {
-            right = mid;
-        }
+   bool chck(const vector<int>& v, int m, int k) {
+        int sum = 0;
+        for (int i : v)
+            sum += (i + m - 1) / m;  // ceiling division using integers
+        return sum <= k;
     }
-    return left;
+    int smallestDivisor(vector<int>& nums, int threshold) {
+                int l = 1, r = *max_element(nums.begin(), nums.end()), ans = l;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if (chck(nums, mid, threshold)) {
+                ans = mid;
+                r = mid - 1;
+            } else
+                l = mid + 1;
+        }
+        return ans;
     }
 };
